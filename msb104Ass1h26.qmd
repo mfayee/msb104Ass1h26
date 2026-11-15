@@ -112,3 +112,30 @@ Korrelasjonsmatrise Fitjar
 Korrelasjonsmatrisene viser flere av de samme mønstrene. Sammenhengen mellom hovedstadregion og logaritmert BNP er 0,64 i begge datasettene. Korrelasjon mellom utdanning og BNP er også ganske lik med 0,72 hos oss mot 0,75 i artikkelen. Dette viser at høyere BNP henger sammen med høyere utdanningsnivå i begge datasettene.
 
 Industrivariabelen viser derimot betydelige forskjeller. Korrelasjonen med BNP er 0,22 hos oss, men -0,15 i artikkelen. Også sammenhengene med utdanning og befolkningstetthet har motsatt fortegn. Dette bør ses i sammenheng med de uvanlige industriverdiene i vår beskrivende statistikk. Forskjellene i korrelasjonene kan ha sammenheng med at industrivariabelen har ulik fordeling i de to datasettene, med større spredning og høyere maksimumsverdi i vårt datasett. Offentlig og privat PoU er positivt korrelert i begge datasettene, med 0,41 hos oss mot 0,48 i artikkelen, men ulik logaritmering gjør sammenligningen mindre direkte.
+
+# 4) Korrelasjonsmatrise 2009
+
+```{r}
+# Velger bare observasjoner fra 2009 og de aktuelle variablene
+korrelasjon_2009 <- eu0823 |>
+  filter(time == 2009) |>
+  select(pub_RD, priv_RD, Capital, GDP_log,
+         Manuf, Density_log, edu) |>
+  rstatix::cor_mat() |>
+  rstatix::pull_lower_triangle(diag = TRUE)
+
+# Viser resultatet som en tabell
+flextable::flextable(korrelasjon_2009) |>
+  flextable::theme_booktabs() |>
+  flextable::autofit()
+```
+
+Korrelasjonsmatrise Fitjar
+
+![](images/clipboard-1318150644.png)
+
+## Sammenligning korrelasjonsmatrise 2009
+
+Korrelasjonsmatrisen vår viser flere likheter med tabell A5 i Fitjar (2025). Korrelasjonen mellom offentlig og privat FoU er 0,50 hos oss mot 0,52 i artikkelem. Sammenhengen mellom hovedstadregion og BNP er også relativt lik, med 0,66 hos oss mot 0,65 i artikkelen. Utdanning er positivt korrelertt med BNP i begge datasettene, men sammenhengen er noe svakere hos oss med 0,62 mot 0,69 i artikkelen.
+
+Industrivariabelen viser tydelige foskjeller. Korrelasjonen med offentlig FoU er omtrent 0 hos oss mot -0,44 i artikkelen. Sammenhengene med BNP, utdanning og befolkningstetthet er positive hos oss og nagative i artikkelem. Forskjellene kan ha sammenheng med at industrivariabelen har ulik fordeling i datasttene. Samlet samsvarer flere av sammenhengene godt, men særlig industrivariabelen skiller seg ut. Artikkelens bruk av logaritmerte FoU-variabler begrenser også den direkte sammenlignbarheten.
