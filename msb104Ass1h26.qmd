@@ -1,0 +1,27 @@
+---
+title: "msb104Ass1h26"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(modelr)
+library(flextable)
+library(plm)
+library(vtable)
+library(rstatix)
+library(modelsummary)
+
+options(paged.print = FALSE)
+```
+
+```{r}
+load(file = 'eu0823.RData', verbose = TRUE)
+```
+
+# 1) Sammendrag
+
+Fitjar (2025) (KILDE!!!) undersøker hvordan offentlige midler til forskning og utvikling (FoU) fordeles mallom europeiske regioner, og om fordelingen bidrar til å opprettholde eller forsterke regionale forskjeller. Studien bruker data fra Eurostat for 200 europeiske regioner i perioden 2009-2018 og sammenligner utviklingen i offentlig FoU med FoU i næringslivet.
+
+Resultatene viser at mer utviklede regioner mottar mer oppentlige FoU-midler, særlig i sammenheng med høyere humankapital og mer FoU i næringslivet. Studien finner beta-konvergens i offentlig FoU, som betyr at regioner med lave utdanningsnivåer har hatt raskere vekst. Likevel finner den ikke sigma-konvergens, altså en reduksjon i den samlede spredningen mellom regionene. For næingslivets FoU finner studien begge former for konvergens. Fitjar konkluderer med at offentlig FoU-finansiering i stor grad kanaliseres til allerede ressurssterke regioner og dermed kan bidra til å opprettholde eller forsterke regionale forskjeller.
