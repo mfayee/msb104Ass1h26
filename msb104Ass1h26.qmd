@@ -139,3 +139,38 @@ Korrelasjonsmatrise Fitjar
 Korrelasjonsmatrisen vår viser flere likheter med tabell A5 i Fitjar (2025). Korrelasjonen mellom offentlig og privat FoU er 0,50 hos oss mot 0,52 i artikkelem. Sammenhengen mellom hovedstadregion og BNP er også relativt lik, med 0,66 hos oss mot 0,65 i artikkelen. Utdanning er positivt korrelertt med BNP i begge datasettene, men sammenhengen er noe svakere hos oss med 0,62 mot 0,69 i artikkelen.
 
 Industrivariabelen viser tydelige foskjeller. Korrelasjonen med offentlig FoU er omtrent 0 hos oss mot -0,44 i artikkelen. Sammenhengene med BNP, utdanning og befolkningstetthet er positive hos oss og nagative i artikkelem. Forskjellene kan ha sammenheng med at industrivariabelen har ulik fordeling i datasttene. Samlet samsvarer flere av sammenhengene godt, men særlig industrivariabelen skiller seg ut. Artikkelens bruk av logaritmerte FoU-variabler begrenser også den direkte sammenlignbarheten.
+
+# 5) Sammenligning korrelasjonsmatrise 2009-2023 og 2009
+
+## Korrelasjonsmatrise fra punkt 3 2008-2023
+
+```{r}
+# Velger perioden og variablene
+korrelasjon_alle <- eu0823 |>
+  filter(time >= 2008, time <= 2023) |>
+  select(pub_RD, priv_RD, Capital, GDP_log,
+         Manuf, Density_log, edu) |>
+  rstatix::cor_mat() |>
+  rstatix::pull_lower_triangle(diag = TRUE)
+
+# Viser korrelasjonsmatrisen som en tabell
+flextable::flextable(korrelasjon_alle) |>
+  flextable::theme_booktabs() |>
+  flextable::autofit()
+```
+
+## Korrelasjonsmatrise Table A5 Fitjar
+
+![](images/clipboard-3438638415.png)
+
+## Sammenligning
+
+Når vi sammenligner vår korrelasjonsmatrise for 2008-2023 med Fitjar (2025) matrise for 2009 i tabell A.5, finner vi både likheter og forskjeller. Korrelasjonen mellom utdanning og BNP er 0,72 hos oss mot 0,69 hos Fitjar. Dette er nærmere artikkelens verdi enn vår korrelasjon på 0,62 for 2009. Sammenhengen mellom offentlig og privar FoU samsvarer derimot dårligere. Den er 0,41 for hele perioden, sammenlignet med 0,52 hos Fitjar og 0,50 i våre 2009-data. Industrivariabelen har fortsatt flere sammenhenger med motsatt fortegn sammenlignet med artikkelen. Hele perioden gir dermed samsvar for enkelte korrelasjoner, men ikke et entydig bedre samsvar samlet sett.
+
+# 6) Variablene GDP, Manuf og Destiny
+
+Variabalen GPD måler regionens BNP per innbygger relativt til landsgjennomsnittet. I analysen brukes den naturlige logariten av dette forholdet. Variabelen viser dermed regionens økonomiske nivå sammenlignet med landet den tilhører.
+
+Variabelen Manuf måler hvor stor prosentandel av den samlede sysselsettingen i regionen som er innen industriproduksjon. Variabelen beskriver hvor indusripreget regionens næringsstrukttur er.
+
+Destiny måler befolkningstettheten, altså innbyggere per kvadrarkilometer. I analysen brukes den naturlige logaritmen av befolkningstetthete.
