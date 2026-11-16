@@ -174,3 +174,55 @@ Variabalen GPD måler regionens BNP per innbygger relativt til landsgjennomsnitt
 Variabelen Manuf måler hvor stor prosentandel av den samlede sysselsettingen i regionen som er innen industriproduksjon. Variabelen beskriver hvor indusripreget regionens næringsstrukttur er.
 
 Destiny måler befolkningstettheten, altså innbyggere per kvadrarkilometer. I analysen brukes den naturlige logaritmen av befolkningstetthete.
+
+# 7) NUTS 2 regioner GPD, Manuf og Destiny
+
+```{r}
+# Beregner gjennomsnitt for hver region
+regionverdier <- eu0823 |>
+  group_by(geo, name) |>
+  summarise(
+    across(
+      c(GDP, Manuf, Density),
+      ~ mean(.x, na.rm = TRUE)
+    ),
+    .groups = "drop"
+  )
+
+# Finner fem høyeste og fem laveste for hver variabel
+topp_bunn <- regionverdier |>
+  pivot_longer(
+    cols = c(GDP, Manuf, Density),
+    names_to = "Variabel",
+    values_to = "Verdi"
+  ) |>
+  filter(is.finite(Verdi)) |>
+  group_by(Variabel) |>
+  group_modify(~ bind_rows(
+    .x |>
+      slice_max(Verdi, n = 5, with_ties = FALSE) |>
+      mutate(Gruppe = "Høyest"),
+    .x |>
+      slice_min(Verdi, n = 5, with_ties = FALSE) |>
+      mutate(Gruppe = "Lavest")
+  )) |>
+  ungroup() |>
+  select(Variabel, Gruppe, geo, name, Verdi)
+
+# Viser resultatene
+flextable::flextable(topp_bunn) |>
+  flextable::colformat_num(j = "Verdi", digits = 2) |>
+  flextable::autofit()
+```
+
+## GDP
+
+De høyeste verdiene for GDP finnes i hovedstadregioner, mens de laveste finnes i Sør-Italia, nordøstlige Romania og nordvestlige Bulgaria. Dette virkeer rimelig ut fra at hovedstadregioner ofte samler mye økonomisk aktivitet. Variabelen måler BNP per innbygger relativt til eget landsgjennomsnitt. Bratislavský kraj sin verdi på omtrent 2,39 betyr dermed at BNP per inbygger ligger rundt 139 prosent over landsgjennomsnittet. Rangeringen viser derfor ikke nødvendigvis hvilke regioner som er rikest i Europa i absolutte tall.
+
+## Manuf
+
+De høyeste verdiene finnes blant annet i norditalienske regioner og Sluttgart, mens de laveste finnes i mindre by-, øy-, og fjellregioner. Rangeringen kan virke rimelig, men verdiene samsvarer ikke uten videre med artikkelens definisjon av Manuf som prosentandelen sysselsatte innen industriproduskjon. Lombardia har et gjennomsnitt på 112,4 som ikke kan være en prosentandel. Måleenheten og beregningen i datasettet bør derfor undersøkes før tallene tolkes som industriandeler.
+
+## Density
+
+De høyeste verdiene finnes i avgrensede byregioner, mens de laveste finnnes i større områder i Sverige og Finland. Dette virker rimelig fordi byområder har mange innbyggere på lite areal, mens større nordiske regioner kan ha mye ubebodd areal. Melilla har en gjennomsnitlig befolkningstetthet på 6038 mens Ovre Norrland har omtrent 3,38.
